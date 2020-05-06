@@ -12,7 +12,6 @@ class LianjiahouseSpider(scrapy.Spider):
     offset = 0
     # 起始url
     start_urls = [url + str(offset)]
-    count = 0
 
 
     def parse(self, response):
@@ -37,7 +36,4 @@ class LianjiahouseSpider(scrapy.Spider):
         item['Rooms'] = response.css('div.content ul li::text').extract_first()
         item['Areas'] = response.css('div.content ul li:nth-child(3)::text').extract_first()
         print(item['Name'])
-        global count
-        count = count + 1
-        print(count)
         yield item
