@@ -6,12 +6,13 @@ class LianjiahouseSpider(scrapy.Spider):
     # 爬虫名称
     name = 'lianjiaHouse'
     # 作用范围
-    allowed_domains = ['bj.lianjia.com/']
+    allowed_domains = ['lianjia.com/']
     # 通过翻页形式的url范围
     url = 'https://bj.lianjia.com/chengjiao/'
     offset = 0
     # 起始url
     start_urls = [url + str(offset)]
+    page = 1
 
 
     def parse(self, response):
@@ -24,12 +25,11 @@ class LianjiahouseSpider(scrapy.Spider):
             item['Date'] = house.css('div.dealDate::text').extract_first()
             yield scrapy.Request(url=item['Link'], callback=self.parse_detail,dont_filter=True, meta={'item':item})
 
-        nexturl = response.css('div.page-box:nth-child(1) > a:nth-child(8)::attr(href)').extract_first()
-        print(nexturl)
-        if nexturl !=None:
-            nexturl = 'https://bj.lianjia.com' + nexturl
-            print(nexturl)
-            yield scrapy.Request(url=nexturl, callback=self.parse)
+        if self.page < 5:
+            self.page = self.page + 1
+            print(self.page)
+            nexturl = self.url + 'pg' + str(self.page)
+            yield scrapy.Request(url=nexturl, callback=self.parse,dont_filter=True)
 
     def parse_detail(self, response):
         item = response.meta['item']

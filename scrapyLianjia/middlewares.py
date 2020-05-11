@@ -6,6 +6,8 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from fake_useragent import UserAgent
+
 
 
 class ScrapylianjiaSpiderMiddleware:
@@ -101,3 +103,16 @@ class ScrapylianjiaDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class UAMiddleware(object):
+    def process_request(self, request, spider):
+        ua = UserAgent()
+        request.headers['User-Agent'] = ua.random
+        # print(request.headers['User-Agent'])
+        return None
+
+class ProxyMiddleware(object):
+    def process_request(self,request, spider):
+
+        return None
