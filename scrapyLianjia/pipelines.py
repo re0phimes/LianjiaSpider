@@ -15,3 +15,4 @@ class ScrapylianjiaPipeline:
         self.DF.append(aItem,ignore_index=True)
         return item
     print(DF)
+
